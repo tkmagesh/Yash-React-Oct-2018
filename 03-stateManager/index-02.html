@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>State Manager - Demo</title>
+	<script src="stateManager.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script type="text/babel">
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'INCREMENT')
+				return ++currentState;
+			if (action.type === 'DECREMENT')
+				return --currentState;
+			return currentState;
+		}
+
+		class Spinner extends React.Component{
+			inc_action = { type : 'INCREMENT'};
+			dec_action = { type : 'DECREMENT'};
+
+			onIncrementClick = () => {
+				this.props.dispatch(this.inc_action);
+			}
+			onDecrementClick = () => {
+				this.props.dispatch(this.dec_action);
+			}
+			render(){
+				let { value } = this.props;
+				return(
+					<div>
+						<input type="button" value="DECREMENT" onClick={this.onDecrementClick}/>
+						<span> [ {value} ] </span>
+						<input type="button" value="INCREMENT" onClick={this.onIncrementClick}/>
+					</div>
+				)
+			}
+		}
+
+		let store = SM.createStore(spinnerReducer);
+
+		function renderApp(){
+			let value = store.getState();
+			ReactDOM.render(<Spinner value={value} dispatch={store.dispatch} />,
+				document.getElementById('root'));
+		}
+		renderApp();
+		store.subscribe(renderApp);
+
+		{/*
+			Remove the knowledge about the store in the component (by passing the state and dispatch)
+		*/}
+	</script>
+</head>
+<body>
+	<h1>Spinner</h1>
+	<hr/>
+	<div id="root"></div>
+</body>
+</html>

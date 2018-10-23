@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>State Manager - Demo</title>
+	<script src="stateManager.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script type="text/babel">
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'INCREMENT')
+				return ++currentState;
+			if (action.type === 'DECREMENT')
+				return --currentState;
+			return currentState;
+		}
+
+
+
+		class Spinner extends React.Component{
+
+			onIncrementClick = () => {
+				this.props.actions.increment();
+			}
+			onDecrementClick = () => {
+				this.props.actions.decrement();
+			}
+			render(){
+				let { value } = this.props;
+				return(
+					<div>
+						<input type="button" value="DECREMENT" onClick={this.onDecrementClick}/>
+						<span> [ {value} ] </span>
+						<input type="button" value="INCREMENT" onClick={this.onIncrementClick}/>
+					</div>
+				)
+			}
+		}
+
+		let store = SM.createStore(spinnerReducer);
+
+		let spinnerActionCreators = {
+			increment(){
+				let action = { type : 'INCREMENT'};
+				return action;
+			},
+			decrement(){
+				let action = { type : 'DECREMENT'};
+				return action;
+			}
+		};
+
+		function bindSpinnerActionCreators(spinnerActionCreators, dispatch){
+			return {
+				increment(){
+					let action = spinnerActionCreators.increment();
+					dispatch(action)
+				},
+				decrement(){
+					let action = spinnerActionCreators.decrement();
+					dispatch(action);
+				}
+			}
+		}
+
+		let spinnerActions = bindSpinnerActionCreators(spinnerActionCreators, store.dispatch);
+		
+		function renderApp(){
+			let value = store.getState();
+			ReactDOM.render(<Spinner value={value} actions={spinnerActions} />,
+				document.getElementById('root'));
+		}
+		renderApp();
+		store.subscribe(renderApp);
+
+		{/*
+			Remove the knowledge about dispatching actions (refactored to bindSpinnerActionCreators)
+		*/}
+	</script>
+</head>
+<body>
+	<h1>Spinner</h1>
+	<hr/>
+	<div id="root"></div>
+</body>
+</html>

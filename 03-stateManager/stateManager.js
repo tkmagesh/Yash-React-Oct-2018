@@ -1,5 +1,5 @@
 let SM = (function(){
-	
+
 	let _currentState = undefined,
 		_reducer = undefined,
 		__init_action = '@@INIT_ACTION',
@@ -31,7 +31,19 @@ let SM = (function(){
 		return store;
 	}
 
+	function bindActionCreators(actionCreators, dispatch){
+		let result = {};
+		for(let key in actionCreators){
+			result[key] = function(){
+				let action = actionCreators[key].apply(undefined, arguments);
+				dispatch(action);
+			}
+		}
+		return result;
+	}
+
 	return {
-		createStore
+		createStore,
+		bindActionCreators
 	};
 })();
