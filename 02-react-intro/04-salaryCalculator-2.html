@@ -20,6 +20,12 @@
 			padding: 10px;
 			font-size: 15pt;
 		}
+		.poorSalary{
+			color : red;
+		}
+		.goodSalary{
+			color : green;
+		}
 	</style>
 	<script type="text/babel">
 		String.prototype.toInt = function() {
@@ -83,13 +89,10 @@
 
 				return(
 					<section>
-						<SalaryCalculatorInput labelText="Basic :" onValueChange={ value => model.set('basic', value) }/>
-						<SalaryCalculatorInput labelText="HRA :" onValueChange={ value => model.set('hra', value) } />
-						<SalaryCalculatorInput labelText="DA :" onValueChange={ value => model.set('da', value) } />
-						<div className="field">
-							<label htmlFor="">Tax :</label>
-							<input type="range" min="0" max="30" defaultValue="0" onChange={ evt => model.set('tax', evt.target.value.toInt())}/>
-						</div>
+						<SalaryCalculatorInput labelText="Basic :" onValueChange={ value => model.set('basic', value) } type="number" />
+						<SalaryCalculatorInput labelText="HRA :" onValueChange={ value => model.set('hra', value) }  type="number" />
+						<SalaryCalculatorInput labelText="DA :" onValueChange={ value => model.set('da', value) }  type="number" />
+						<SalaryCalculatorInput labelText="Tax :" onValueChange={ value => model.set('tax', value) } type="range" min="0" max="30" defaultValue="0" />
 						<div className="field">
 							<input type="button" value="Calculate" id="btnCalculate" onClick={ evt => model.calculate() } />
 						</div>
@@ -101,11 +104,11 @@
 
 		class SalaryCalculatorInput extends React.Component{
 			render(){
-				let { labelText, onValueChange } = this.props;
+				let { labelText, onValueChange, type, ...attrs } = this.props;
 				return(
 					<div className="field">
 						<label htmlFor="">{labelText}</label>
-						<input type="number" onChange={ evt => onValueChange(evt.target.value.toInt()) }/>
+						<input type={type} onChange={ evt => onValueChange(evt.target.value.toInt()) } {...attrs} />
 					</div>
 				)
 			}
@@ -114,16 +117,19 @@
 		class SalaryCalculatorResult extends React.Component{
 			render(){
 				let { basic, hra, da, tax, salary } = this.props;
+				//let salaryEle = salary < 10000 ? ( <td className="poorSalary">{salary}</td> ) : ( <td className="goodSalary">{salary}</td> )
+				let salaryEleStyle = salary < 10000 ? 'poorSalary' : 'goodSalary';
+				let salaryEle = salary > 0 ? ( <td className={salaryEleStyle}>{salary} </td> ) : null;
 				return(
 					<div className="field">
 						<table>
 							<tbody>
 								<tr>
-									<td id="tdBasic">{basic}</td>
-									<td id="tdHra">{hra}</td>
-									<td id="tdDa">{da}</td>
-									<td id="tdTax">{tax}</td>
-									<td id="tdSalary">{salary}</td>
+									<td>{basic}</td>
+									<td>{hra}</td>
+									<td>{da}</td>
+									<td>{tax}</td>
+									{salaryEle}
 								</tr>
 							</tbody>
 						</table>
