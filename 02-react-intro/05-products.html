@@ -7,37 +7,66 @@
 	<script src="react.development.js"></script>
 	<script src="react-dom.development.js"></script>
 	<script type="text/babel">
+
+		class EventEmitter{
+			_listenerFns = [];
+			subscribe(listenerFn){
+				this._listenerFns.push(listenerFn);
+			}
+			triggerChange(){
+				this._listenerFns.forEach(listenerFn => listenerFn());
+			}
+		}
+
+		class ProductsModel extends EventEmitter{
+			_list = [];
+
+			getAll(){
+				return [...this._list];
+			}
+
+			addNew(productName){
+				this._list.push(productName);
+				this.triggerChange();
+			}
+		}
 		
 
 		class Products extends React.Component{
+
+			state = { newProductName : '' };
+
 			render(){
-				let products = [
-					
-				];
-				/*
-				let productItems = [];
-				for(let index = 0, count = products.length; index < count; index++){
-					let productItem = (<li key={index}>{products[index]}</li>);
-					productItems.push(productItem);
-				}
-				*/
-				let productItems = products.map((product, index) => (<li key={index}>{product}</li>));
+				let { model } = this.props,
+					products = model.getAll(),
+					productItems = products.map((product, index) => (<li key={index}>{product}</li>));
 
 				return(
 					<div>
-					<label>Product Name :</label>
-					<input type="text" />
-					<input type="button" value="Add New" />
-					<ol>
-						{productItems}
-					</ol>
+						<label>Product Name :</label>
+						<input type="text" onChange = { evt => this.setState({newProductName : evt.target.value }) }/>
+						<input type="button" value="Add New" onClick={ evt => model.addNew(this.state.newProductName) }/>
+						<ol>
+							{productItems}
+						</ol>
 					</div>
 				)
 			}
 		}
+	
+		let model = new ProductsModel();
 
-		ReactDOM.render(<Products />, 
-			document.getElementById('root'));
+		function renderApp(){
+			ReactDOM.render(
+				<div>
+					<h2>{model.getAll().length}</h2>
+					<Products model={model} />
+				</div>,
+					document.getElementById('root'));
+				
+		}
+		renderApp();
+		model.subscribe(renderApp);
 
 	</script>
 </head>
