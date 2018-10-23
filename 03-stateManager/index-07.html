@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>State Manager - Demo</title>
+	<script src="redux.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script type="text/babel">
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'INCREMENT')
+				return currentState + action.payload;
+			if (action.type === 'DECREMENT')
+				return currentState - action.payload;
+			return currentState;
+		}
+
+
+
+		class Spinner extends React.Component{
+			txtDelta = React.createRef();
+
+			onIncrementClick = () => {
+				this.props.increment(this.txtDelta.current.valueAsNumber);
+			}
+			onDecrementClick = () => {
+				this.props.decrement(this.txtDelta.current.valueAsNumber);
+			}
+			render(){
+				let { value } = this.props;
+				return(
+					<div>
+						<input type="number" ref={this.txtDelta} />
+						<input type="button" value="DECREMENT" onClick={this.onDecrementClick}/>
+						<span> [ {value} ] </span>
+						<input type="button" value="INCREMENT" onClick={this.onIncrementClick}/>
+					</div>
+				)
+			}
+		}
+
+		let store = Redux.createStore(spinnerReducer);
+
+		let spinnerActionCreators = {
+			increment(delta){
+				let action = { type : 'INCREMENT', payload : delta};
+				return action;
+			},
+			decrement(delta){
+				let action = { type : 'DECREMENT', payload : delta};
+				return action;
+			}
+		};
+
+		let spinnerActions = Redux.bindActionCreators(spinnerActionCreators, store.dispatch);
+
+		function renderApp(){
+			let value = store.getState();
+			ReactDOM.render(<Spinner value={value} {...spinnerActions} />,
+				document.getElementById('root'));
+		}
+		renderApp();
+		store.subscribe(renderApp);
+
+		{/*
+			passing payload to actions ( a delta value for increment and decrement )
+		*/}
+	</script>
+</head>
+<body>
+	<h1>Spinner</h1>
+	<hr/>
+	<div id="root"></div>
+</body>
+</html>
