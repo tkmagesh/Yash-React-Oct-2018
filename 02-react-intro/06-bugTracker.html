@@ -69,20 +69,31 @@
 				return [...this._list];
 			}
 			addNew(bugName){
-				this._list.push(bugName);
+				let newBug = {
+					name : bugName,
+					isClosed : false
+				};
+				this._list.push(newBug);
+				this.triggerChange();
+			}
+
+			removeClosed(){
+				this._list = this._list.filter(bug => !bug.isClosed);
 				this.triggerChange();
 			}
 		}
 
 		class BugItem extends React.Component{
 			onBugNameClick = () => {
-				console.log('A bug is clicked', this.props.bug);
+				let { bug } = this.props;
+				bug.isClosed = !bug.isClosed;
+				console.log(bug);
 			}
 			render(){
 				let { bug } = this.props; 
 				return(
 					<li>
-						<span className="bugname" onClick={this.onBugNameClick}>{bug}</span>
+						<span className="bugname" onClick={this.onBugNameClick}>{JSON.stringify(bug)}</span>
 						<div className="datetime">[Created At]</div>
 					</li>
 				)
@@ -96,7 +107,9 @@
 				this.props.model.addNew(this.state.newBugName);
 			}
 
-			
+			onRemoveClosedClick = () => {
+				this.props.model.removeClosed();
+			}
 
 			render(){
 				let bugs = this.props.model.getAll(),
@@ -128,7 +141,7 @@
 							<ol>
 								{bugItems}
 							</ol>
-							<input type="button" value="Remove Closed" />
+							<input type="button" value="Remove Closed" onClick={this.onRemoveClosedClick} />
 						</section>
 					</div>
 				)
