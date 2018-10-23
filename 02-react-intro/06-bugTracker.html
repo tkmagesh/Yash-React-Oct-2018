@@ -69,10 +69,7 @@
 				return [...this._list];
 			}
 			addNew(bugName){
-				let newBug = {
-					name : bugName,
-					isClosed : false
-				};
+				let newBug = new BugModel(bugName);
 				this._list.push(newBug);
 				this.triggerChange();
 			}
@@ -83,10 +80,23 @@
 			}
 		}
 
+		class BugModel{
+			name = '';
+			isClosed = false;
+
+			constructor(name){
+				this.name = name;
+			}
+
+			toggle(){
+				this.isClosed = !this.isClosed;
+			}
+		}
+
 		class BugItem extends React.Component{
 			onBugNameClick = () => {
 				let { bug } = this.props;
-				bug.isClosed = !bug.isClosed;
+				bug.toggle();
 				console.log(bug);
 			}
 			render(){
