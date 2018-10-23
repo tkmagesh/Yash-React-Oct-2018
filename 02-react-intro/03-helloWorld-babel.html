@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		//(function(){
+			function init(){
+				var btnRender = document.getElementById('btnRender');
+				btnRender.addEventListener('click', onBtnRenderClick);
+			}
+			var counter = 0;
+			function onBtnRenderClick(){
+				++counter;
+				var viewEle = ( <div>
+						<h1>Hello World - {counter}</h1>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<div>
+							<h2>Advantages - {counter}</h2>
+							<ol>
+								<li>Efficient</li>
+								<li>Declarative</li>
+							</ol>
+						</div>
+					</div>
+				);
+				ReactDOM.render(viewEle, document.getElementById('root'));
+			}
+			//window.addEventListener('DOMContentLoaded', init);
+			init();
+		//})();
+	</script>
+</head>
+<body>
+	<input type="button" value="Render" id="btnRender">
+	<h3 id="counter"></h3>
+	<div id="root"></div>
+</body>
+</html>

@@ -48,6 +48,10 @@
 		$(function(){
 			window['model'] = new SalaryCalculatorModel();
 
+			model.onSalaryChange = function(){
+				$('#tdSalary').html(model.salary);
+			};
+
 			$('#txtBasic').change(function(){
 				model.basic = $(this).val().toInt();
 			});
@@ -75,9 +79,7 @@
 				
 			});
 
-			model.onSalaryChange = function(){
-				$('#tdSalary').html(model.salary);
-			};
+			
 		});
 	</script>
 </head>

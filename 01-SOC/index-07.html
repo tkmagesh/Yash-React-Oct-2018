@@ -26,50 +26,96 @@
 
 		//state & bahavior
 		function SalaryCalculatorModel(){
-			//state
-			this.basic = 0;
-			this.hra = 0;
-			this.da = 0;
-			this.tax = 0;
-			this.salary = 0;
+			var _data = {
+				basic : 0,
+				hra : 0,
+				da : 0,
+				tax : 0,
+				salary : 0
+			};
+
+			var _changeListeners = {
+				basic : [],
+				hra : [],
+				da : [],
+				tax : [],
+				salary : []
+			};
+
+			this.get = function(attrName){
+				return _data[attrName];
+			};
+			this.set = function(attrName, value){
+				if (_data[attrName] === value) return;
+				_data[attrName] = value;
+				triggerChange(attrName);
+			};
+			
+			function triggerChange(attrName){
+				var listenerFns = _changeListeners[attrName];
+				listenerFns.forEach(function(listenerFn){
+					if (typeof listenerFn === 'function')
+						listenerFn();
+				});
+			}
+			this.subscribe = function(attrName, listenerFn){
+				_changeListeners[attrName].push(listenerFn);
+			}
 		}
 		//behavior
 		SalaryCalculatorModel.prototype.calculate = function() {
-			var gross = this.basic + this.hra + this.da;
-			var net = gross * ((100-this.tax)/100);
-			this.salary = net;
+			var gross = this.get('basic') + this.get('hra') + this.get('da');
+			var net = gross * ((100-this.get('tax'))/100);
+			this.set('salary', net);
 		};
 
 		//View
 		$(function(){
 			window['model'] = new SalaryCalculatorModel();
 
+			model.subscribe('salary', function(){
+				$('#tdSalary').html(model.get('salary'));
+			});
+
+			model.subscribe('basic', function(){
+				$('#tdBasic').html(model.get('basic'));
+			});
+
+			model.subscribe('hra', function(){
+				$('#tdHra').html(model.get('hra'));
+			});
+
+			model.subscribe('da', function(){
+				$('#tdDa').html(model.get('da'));
+			});
+
+			model.subscribe('tax', function(){
+				$('#tdTax').html(model.get('tax'));
+			});
+			
+
+
 			$('#txtBasic').change(function(){
-				model.basic = $(this).val().toInt();
+				model.set('basic', $(this).val().toInt());
 			});
 
 			$('#txtHra').change(function(){
-				model.hra = $(this).val().toInt();
+				model.set('hra', $(this).val().toInt());
 			});
 
 			$('#txtDa').change(function(){
-				model.da = $(this).val().toInt();
+				model.set('da', $(this).val().toInt());
 			});
 
 			$('#rangeTax').change(function(){
-				model.tax = $(this).val().toInt();
+				model.set('tax', $(this).val().toInt());
 			});
 
 			$('#btnCalculate').click(function(){
-
 				model.calculate();
-
-				$('#tdBasic').html(model.basic);
-				$('#tdHra').html(model.hra);
-				$('#tdDa').html(model.da);
-				$('#tdTax').html(model.tax);
-				$('#tdSalary').html(model.salary);
 			});
+
+			
 		});
 	</script>
 </head>
