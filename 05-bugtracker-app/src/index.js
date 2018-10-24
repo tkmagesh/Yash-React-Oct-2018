@@ -8,16 +8,23 @@ import BugTracker from './bugTracker';
 import Spinner from './spinner';
 import appStore from './store';
 
-import axios from 'axios';
-
-window['axios'] = axios;
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 ReactDOM.render(
 	<Provider store={appStore}>
-		<div>
-			<Spinner />
-			<hr/>
-			<BugTracker />
-		</div>
+		<Router>
+			<div>
+				<p>
+					<Link to="/">Bug Tracker</Link>
+					<br/>
+					<Link to="/spinner">Spinner</Link>
+					<br />
+				</p>
+			  <Route exact path="/" component={BugTracker} />
+		      <Route path="/bugs" component={BugTracker} />
+		      <Route path="/spinner" component={Spinner} />
+		    </div> 
+	    </Router>
 	</Provider>
-	, document.getElementById('root'));
+	, document.getElementById('root')
+);
