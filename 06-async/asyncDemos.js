@@ -51,3 +51,47 @@
 	window['addAsyncPromise'] = addAsyncPromise;
 
 })();
+
+/*
+Promise Client Code
+
+var p = addAsyncPromise(100,200);
+//then, catch
+
+//Followup operation is asynchronous
+var p2 = p.then(function(result){
+	console.log(`[@Client] result = ${result}`);
+	
+	return new Promise(function(resolveFn, rejectFn){
+		setTimeout(function(){
+			var doubleResult = result * 2;
+			resolveFn(doubleResult);
+        }, 5000);
+    }
+});
+
+//Folloup operation is synchronous - 1
+var p2 = p.then(function(result){
+	console.log(`[@Client] result = ${result}`);
+	
+	return new Promise(function(resolveFn, rejectFn){
+        var doubleResult = result * 2;
+        resolveFn(doubleResult);
+    });
+});
+
+//Followup operation is synchronous - 2
+var p2 = p.then(function(result){
+	console.log(`[@Client] result = ${result}`);
+	var doubleResult = result * 2;
+	return Promise.resolve(doubleResult);
+});
+
+//Followup operation is synchronous - 3
+var p2 = p.then(function(result){
+	console.log(`[@Client] result = ${result}`);
+	var doubleResult = result * 2;
+	return doubleResult;
+});
+
+*/
