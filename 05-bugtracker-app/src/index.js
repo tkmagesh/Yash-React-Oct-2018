@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 
-
 import BugTracker from './bugTracker';
 import Spinner from './spinner';
 import appStore from './store';
