@@ -10,10 +10,15 @@ import BugList from './views/BugList';
 import * as bugActionCreators from './actions';
 
 class BugTracker extends Component{
+	componentDidMount(){
+		this.props.load();
+	}
 	render(){
-		let { model : bugs, toggle, addNew, removeClosed } = this.props;
+		let { model : bugs, toggle, addNew, removeClosed, load } = this.props;
 		return(
+
 			<div>
+
 				{/*BugStats*/}
 				<BugStats bugs={bugs} />
 
@@ -32,7 +37,10 @@ class BugTracker extends Component{
 
 export default connect(
 	state => ({model : state.bugsData}),
-	dispatch => bindActionCreators(bugActionCreators, dispatch)
+	dispatch => {
+		let bugActions = bindActionCreators(bugActionCreators, dispatch);
+		return bugActions;
+	}
 )(BugTracker);
 
 

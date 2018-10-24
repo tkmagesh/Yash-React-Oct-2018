@@ -13,7 +13,7 @@ class BugList extends Component{
 				<ol>
 					{bugItems}
 				</ol>
-				<input type="button" value="Remove Closed" onClick={() => removeClosed(bugs)} />
+				<input type="button" value="Remove Closed" onClick={removeClosed} />
 			</section>
 		)
 	}

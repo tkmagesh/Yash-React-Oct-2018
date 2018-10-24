@@ -7,10 +7,10 @@
       "createdAt": "2018-08-29T09:47:32.505Z"
     },
     {
-      "id": 2,
-      "name": "Server communication failure",
-      "isClosed": true,
-      "createdAt": "2018-09-16T06:55:49.787Z"
+      "id": 4,
+      "name": "Application is not responding",
+      "isClosed": false,
+      "createdAt": "2018-10-24T11:35:33.772Z"
     }
   ],
   "projects": [
