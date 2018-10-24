@@ -48,7 +48,24 @@
 		return promise;
 	}
 
-	window['addAsyncPromise'] = addAsyncPromise;
+	//window['addAsyncPromise'] = addAsyncPromise;
+
+	/*function addAsyncPromiseClient(x,y){
+		console.log(`[@Client] triggering addAsyncPromise`);
+		
+		addAsyncPromise(x,y)
+			.then(function(result){
+				console.log(`[@Client] result = ${result}`);
+			});
+	}*/
+
+	async function addAsyncPromiseClient(x,y){
+		console.log(`[@Client] triggering addAsyncPromise`);		
+		var result = await addAsyncPromise(x,y);
+		console.log(`[@Client] result = ${result}`);
+	}
+
+	window['addAsyncPromiseClient'] = addAsyncPromiseClient;
 
 })();
 
