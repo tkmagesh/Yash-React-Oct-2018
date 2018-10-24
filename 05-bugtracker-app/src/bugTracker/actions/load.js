@@ -2,7 +2,6 @@ import bugApi from '../services/bugApi';
 
 export function load(){
   return async function(dispatch){
-      console.log(arguments);
       /*bugApi
         .getAll()
     		.then(function(bugs){       
